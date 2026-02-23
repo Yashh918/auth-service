@@ -1,7 +1,6 @@
 package org.example.service;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.dto.request.AuthRequestDTO;
 import org.example.dto.request.CreateUserDTO;
 import org.example.dto.request.RefreshTokenRequestDTO;
