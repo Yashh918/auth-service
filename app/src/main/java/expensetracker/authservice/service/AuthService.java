@@ -15,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 import java.util.HashSet;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +40,6 @@ public class AuthService {
 
 //        2. Create new user and save user
         UserInfo user = new UserInfo();
-        user.setUserId(UUID.randomUUID().toString());
         user.setUsername(createUserDTO.getUsername());
         user.setEmail(createUserDTO.getEmail());
         user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
@@ -53,12 +49,11 @@ public class AuthService {
 
 //        3. Create kafka event and send event
         AuthUserRegisteredEvent event = new AuthUserRegisteredEvent();
-        event.setUserId(user.getUserId());
+        event.setUserId(savedUser.getUserId());
         event.setUsername(createUserDTO.getUsername());
         event.setEmail(createUserDTO.getEmail());
         event.setFirstName(createUserDTO.getFirstName());
         event.setLastName(createUserDTO.getLastName());
-        event.setCreatedAt(Instant.now());
 
         authEventProducer.sendUserRegisteredEvent(event);
 
