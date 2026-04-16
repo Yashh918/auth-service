@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Data
 @RestController
-@RequestMapping("/auth/v1")
+@RequestMapping("/api/v1/auth/")
 public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
