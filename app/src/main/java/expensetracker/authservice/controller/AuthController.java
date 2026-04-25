@@ -1,24 +1,26 @@
 package expensetracker.authservice.controller;
 
-import lombok.Data;
-import expensetracker.authservice.dto.request.AuthRequestDTO;
-import expensetracker.authservice.dto.request.CreateUserDTO;
-import expensetracker.authservice.dto.request.RefreshTokenRequestDTO;
-import expensetracker.authservice.dto.response.AuthResponseDTO;
-import expensetracker.authservice.service.AuthService;
-import expensetracker.authservice.service.RefreshTokenService;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.HashMap;
-import java.util.Map;
+
+import expensetracker.authservice.dto.request.AuthRequestDTO;
+import expensetracker.authservice.dto.request.CreateUserDTO;
+import expensetracker.authservice.dto.request.RefreshTokenRequestDTO;
+import expensetracker.authservice.dto.response.AuthResponseDTO;
+import expensetracker.authservice.service.AuthService;
+import expensetracker.authservice.service.RefreshTokenService;
+import lombok.Data;
 
 @Data
 @RestController
-@RequestMapping("/api/v1/auth/")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;

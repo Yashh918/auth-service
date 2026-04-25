@@ -48,8 +48,3 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
-
-application {
-    // Define the main class for the application.
-    mainClass = 'dev.yashh.expensetracker.authservice'
-}
