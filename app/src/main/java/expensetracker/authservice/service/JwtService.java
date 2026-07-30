@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -18,30 +17,13 @@ public class JwtService {
     public static final String SECRET = "27b24bc8ad36767bf6ab78a1da0a7c7bc34c0ad1932a10133f9b2103a15ce8a0";
 
 //    public APIs
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-
-    public String generateToken(String username) {
+    public String generateToken(String userId) {
         Map<String,  Object> claims = new HashMap<>();
-        return buildToken(username, claims);
+        return buildToken(userId, claims);
     }
 
-//    public String generateToken(String username, Map<String, Object> claims) {
-//        return buildToken(username, claims);
-//    }
-
-    public String extractUsername(String token) {
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
     }
 
 //    private helpers
@@ -64,11 +46,11 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private String buildToken(String username, Map<String, Object> claims) {
+    private String buildToken(String userId, Map<String, Object> claims) {
         return Jwts
                 .builder()
                 .claims(claims)
-                .subject(username)
+                .subject(userId)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
                 .signWith(getSignKey())

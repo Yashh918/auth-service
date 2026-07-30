@@ -25,4 +25,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return new CustomUserDetails(user);
     }
+
+    public UserDetails loadUserByUserId (String userId) throws RuntimeException {
+        UserInfo user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
+
+        return new CustomUserDetails(user);
+    }
 }

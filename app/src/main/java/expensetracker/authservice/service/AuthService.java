@@ -58,8 +58,8 @@ public class AuthService {
         authEventProducer.sendUserRegisteredEvent(event);
 
 //        4.Generate tokens
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getUsername());
-        String accessToken = jwtService.generateToken(savedUser.getUsername());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(savedUser.getUserId());
+        String accessToken = jwtService.generateToken(savedUser.getUserId());
 
 //        4. Return response
         return AuthResponseDTO
@@ -78,14 +78,16 @@ public class AuthService {
                 )
         );
 
-        System.out.println("Authentication successful");
+//        2. Get userId
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails != null ? userDetails.getUserId() : null;
 
 
-//        2. Generate tokens
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDTO.getUsername());
-        String accessToken = jwtService.generateToken(authRequestDTO.getUsername());
+//        3. Generate tokens
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userId);
+        String accessToken = jwtService.generateToken(userId);
 
-//        3. return response
+//        4. return response
         return AuthResponseDTO
                 .builder()
                 .accessToken(accessToken)
@@ -93,7 +95,7 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponseDTO refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
+    public AuthResponseDTO refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) throws RuntimeException{
 //        1. Find the refresh token in DB
 //        2. Verify its expiration
 //        3. Fetch user details
@@ -105,7 +107,7 @@ public class AuthService {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUserInfo)
                 .map(userInfo -> {
-                    String accessToken = jwtService.generateToken(userInfo.getUsername());
+                    String accessToken = jwtService.generateToken(userInfo.getUserId());
                     return AuthResponseDTO
                             .builder()
                             .accessToken(accessToken)
